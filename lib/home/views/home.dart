@@ -35,6 +35,9 @@ class _HomePageState extends State<HomePage> {
                 isLoading = true;
               });
             } else if (state is SubmitSuccess) {
+              setState(() {
+                isLoading = false;
+              });
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.green,
@@ -233,23 +236,31 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     width: size.width,
                     height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (scaffoldKey.currentState!.validate()) {
-                          homeBloc.add(Submit(
-                              staffId: staffIdC.text,
-                              name: nameC.text,
-                              hobby: hobbyC.text,
-                              password: passwordC.text));
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Text('Submit'),
-                    ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.green),
+                              strokeWidth: 6,
+                            ),
+                          )
+                        : ElevatedButton(
+                            onPressed: () {
+                              if (scaffoldKey.currentState!.validate()) {
+                                homeBloc.add(Submit(
+                                    staffId: staffIdC.text,
+                                    name: nameC.text,
+                                    hobby: hobbyC.text,
+                                    password: passwordC.text));
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Text('Submit'),
+                          ),
                   ),
                 )
               ],
